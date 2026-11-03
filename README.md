@@ -32,7 +32,6 @@ npm run crawl 动态  # 只抓动态
 npm run crawl 能力项目  # 只抓能力项目（CMA）
 ```
 
-访问 <http://localhost:3000>
 
 ## 爬虫配置
 
