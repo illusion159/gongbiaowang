@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+
+<div class="breadcrumb"><a href="/">工标网</a> <span class="cur">› <a href="/news">标准动态</a> › <%= n.title %></span></div>
+
+<div class="detail-head">
+  <h1><%= n.title %></h1>
+  <div class="detail-meta">
+    <% if (n.publish_date) { %><span style="color:var(--muted)"><%= n.publish_date %></span><% } %>
+    <% if (n.source) { %><span class="sep">·</span><span style="color:var(--muted)"><%= n.source %></span><% } %>
+  </div>
+</div>
+
+<% if (n.content) { %>
+  <div class="content-body"><%- n.content.replace(/\n/g, '<br>') %></div>
+<% } %>
+
+<%- include('partials/footer') %>

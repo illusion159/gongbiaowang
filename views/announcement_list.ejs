@@ -1,0 +1,40 @@
+<%- include('partials/header') %>
+
+<div class="breadcrumb"><a href="/">工标网</a> <span class="cur">› 标准公告</span></div>
+
+<div class="page-head">
+  <h1>标准公告</h1>
+  <p class="sub">国家标准与行业标准的批准发布、备案公告。</p>
+</div>
+
+<div class="filter-bar">
+  <a href="/announcement" class="<%= !category ? 'on' : '' %>">全部</a>
+  <% categories.forEach((c) => { %>
+    <a href="/announcement?category=<%= encodeURIComponent(c) %>" class="<%= category === c ? 'on' : '' %>"><%= c %></a>
+  <% }) %>
+</div>
+
+<div class="table-wrap">
+  <ul class="announce-list">
+    <% result.rows.forEach((r, i) => { %>
+      <li>
+        <span class="idx"><%= (result.page - 1) * result.pageSize + i + 1 %></span>
+        <a class="a-title" href="/announcement/<%= r.id %>"><%= r.title %></a>
+        <span class="a-date"><%= r.publish_date %></span>
+      </li>
+    <% }) %>
+    <% if (!result.rows.length) { %>
+      <li class="empty">该分类暂无公告数据</li>
+    <% } %>
+  </ul>
+</div>
+
+<% if (totalPages > 1) { %>
+  <div class="pagination">
+    <% if (result.page > 1) { %><a href="/announcement?category=<%= encodeURIComponent(category) %>&page=<%= result.page - 1 %>">上一页</a><% } %>
+    <span>第 <%= result.page %> / <%= totalPages %> 页</span>
+    <% if (result.page < totalPages) { %><a href="/announcement?category=<%= encodeURIComponent(category) %>&page=<%= result.page + 1 %>">下一页</a><% } %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

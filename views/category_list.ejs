@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+
+<div class="breadcrumb"><a href="/">工标网</a> <span class="cur">› <a href="/category">标准分类</a> › <%= label %></span></div>
+
+<div class="page-head">
+  <h1><%= label %></h1>
+  <p class="sub">共 <span class="num"><%= total.toLocaleString('zh-CN') %></span> 条标准</p>
+</div>
+
+<div class="table-wrap">
+  <table class="table">
+    <thead><tr><th>标准编号</th><th>标准名称</th><th class="num">状态</th></tr></thead>
+    <tbody>
+      <% rows.forEach((s) => { %>
+        <tr>
+          <td class="std-num"><a href="/standard/<%= s.id %>"><%= s.std_number %></a></td>
+          <td class="title"><a href="/standard/<%= s.id %>"><%= s.title %></a></td>
+          <td class="num"><span class="status status-<%= s.status %>"><%= s.status %></span></td>
+        </tr>
+      <% }) %>
+      <% if (!rows.length) { %>
+        <tr><td class="empty" colspan="3">该分类暂无数据。</td></tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<% if (totalPages > 1) { %>
+  <div class="pagination">
+    <% if (page > 1) { %><a href="<%= baseUrl %>?page=<%= page - 1 %>">上一页</a><% } %>
+    <span>第 <%= page %> / <%= totalPages %> 页</span>
+    <% if (page < totalPages) { %><a href="<%= baseUrl %>?page=<%= page + 1 %>">下一页</a><% } %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

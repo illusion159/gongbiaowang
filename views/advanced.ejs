@@ -1,0 +1,85 @@
+<%- include('partials/header') %>
+
+<div class="breadcrumb"><a href="/">工标网</a> <span class="cur">› 高级查询</span></div>
+
+<div class="page-head">
+  <h1>高级查询</h1>
+  <p class="sub">按编号、名称、分类、单位等多字段组合检索标准。</p>
+</div>
+
+<form method="get" action="/search" class="advanced-form">
+  <input type="hidden" name="advanced" value="1">
+  <div class="form-grid">
+    <div class="form-item">
+      <label for="f-title">标准标题</label>
+      <input type="text" id="f-title" name="title" placeholder="输入标准名称关键字">
+    </div>
+    <div class="form-item">
+      <label for="f-num">标准编号</label>
+      <input type="text" id="f-num" name="std_number" placeholder="如 GB/T 43187">
+    </div>
+    <div class="form-item">
+      <label for="f-replace">替代情况</label>
+      <input type="text" id="f-replace" name="replace" placeholder="替代标准编号">
+    </div>
+    <div class="form-item">
+      <label for="f-adopt">采标情况</label>
+      <input type="text" id="f-adopt" name="adopt" placeholder="采用标准编号">
+    </div>
+    <div class="form-item">
+      <label for="f-ccs">中标分类</label>
+      <select id="f-ccs" name="ccs">
+        <option value="">全部</option>
+        <% ccsList.forEach((c) => { %>
+          <option value="<%= c.code %>"><%= c.code %> <%= c.name %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="form-item">
+      <label for="f-ics">ICS 分类</label>
+      <input type="text" id="f-ics" name="ics" placeholder="如 43.040">
+    </div>
+    <div class="form-item">
+      <label for="f-drafting">起草单位</label>
+      <input type="text" id="f-drafting" name="drafting" placeholder="输入起草单位关键字">
+    </div>
+    <div class="form-item">
+      <label for="f-tc">归口单位</label>
+      <input type="text" id="f-tc" name="tc" placeholder="如 全国汽车标准化技术委员会">
+    </div>
+    <div class="form-item">
+      <label for="f-dept">发布部门</label>
+      <input type="text" id="f-dept" name="dept" placeholder="如 国家标准化管理委员会">
+    </div>
+    <div class="form-item">
+      <label for="f-status">标准状态</label>
+      <select id="f-status" name="status">
+        <option value="">全部</option>
+        <% statuses.forEach((s) => { %><option value="<%= s %>"><%= s %></option><% }) %>
+      </select>
+    </div>
+    <div class="form-item">
+      <label for="f-sort">排序方式</label>
+      <select id="f-sort" name="sort">
+        <option value="1">默认（相关度）</option>
+        <option value="2">标准编号</option>
+        <option value="3">发布日期</option>
+        <option value="4">实施日期</option>
+        <option value="5">状态</option>
+      </select>
+    </div>
+    <div class="form-item">
+      <label for="f-way">排序方向</label>
+      <select id="f-way" name="way">
+        <option value="desc">降序</option>
+        <option value="asc">升序</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">查询</button>
+    <button type="reset" class="btn btn-ghost">重置</button>
+  </div>
+</form>
+
+<%- include('partials/footer') %>

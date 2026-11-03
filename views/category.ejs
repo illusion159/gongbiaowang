@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+
+<div class="breadcrumb"><a href="/">工标网</a> <span class="cur">› 标准分类</span></div>
+
+<div class="page-head">
+  <h1>标准分类</h1>
+  <p class="sub">按中标分类（CCS）与行业标准代号浏览全部标准。</p>
+</div>
+
+<div class="section">
+  <div class="section-head"><h2>中标分类（CCS）</h2></div>
+  <div class="industry-grid">
+    <% ccsStats.forEach((c) => { %>
+      <a href="/category/ccs/<%= c.code %>" class="industry-item">
+        <span class="code"><%= c.code %></span>
+        <span class="name"><%= c.name %></span>
+        <span class="cnt"><%= c.count.toLocaleString('zh-CN') %></span>
+      </a>
+    <% }) %>
+  </div>
+</div>
+
+<div class="section" style="margin-bottom: 0;">
+  <div class="section-head"><h2>行业标准分类</h2></div>
+  <div class="industry-grid">
+    <% industryStats.forEach((c) => { %>
+      <a href="/category/industry/<%= c.code %>" class="industry-item">
+        <span class="code"><%= c.code %></span>
+        <span class="name"><%= c.name %></span>
+        <span class="cnt"><%= c.count.toLocaleString('zh-CN') %></span>
+      </a>
+    <% }) %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

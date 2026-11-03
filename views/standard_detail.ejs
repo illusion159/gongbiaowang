@@ -1,0 +1,90 @@
+<%- include('partials/header') %>
+
+<div class="breadcrumb"><a href="/">工标网</a> <span class="cur">› 标准详情 › <%= std.std_number %></span></div>
+
+<div class="detail-head">
+  <h1><%= std.title %></h1>
+  <div class="detail-meta">
+    <span class="std-num"><%= std.std_number %></span>
+    <span class="sep">·</span>
+    <span class="status status-<%= std.status %>"><%= std.status %></span>
+    <% if (std.publish_date) { %><span class="sep">·</span><span style="color:var(--muted)">发布 <%= std.publish_date %></span><% } %>
+  </div>
+</div>
+
+<% if (std.pdf_url) { %>
+  <div class="section">
+    <div class="section-head"><h2>标准原文</h2></div>
+    <a href="<%= std.pdf_url %>" target="_blank" rel="noopener" class="btn btn-ghost">查看 PDF 原文</a>
+  </div>
+<% } %>
+
+<table class="detail-table">
+  <% if (std.summary) { %>
+    <tr><th>标准简介</th><td><%= std.summary %></td></tr>
+  <% } %>
+  <% if (std.content) { %>
+    <tr><th>详细内容</th><td><%- std.content.replace(/\n/g, '<br>') %></td></tr>
+  <% } %>
+  <% if (std.title_eng) { %>
+    <tr><th>英文名称</th><td><%= std.title_eng %></td></tr>
+  <% } %>
+  <% if (std.replace_info) { %>
+    <tr><th>替代情况</th><td><%= std.replace_info %></td></tr>
+  <% } %>
+  <% if (std.adopt_info) { %>
+    <tr><th>采标情况</th><td><%= std.adopt_info %></td></tr>
+  <% } %>
+  <% if (std.ccs_code) { %>
+    <tr><th>中标分类</th><td><%= std.ccs_path || std.ccs_code %>（<%= std.ccs_code %>）</td></tr>
+  <% } %>
+  <% if (std.ics_code) { %>
+    <tr><th>ICS 分类</th><td><%= std.ics_path || std.ics_code %>（<%= std.ics_code %>）</td></tr>
+  <% } %>
+  <% if (std.publish_dept) { %>
+    <tr><th>发布部门</th><td><%= std.publish_dept %></td></tr>
+  <% } %>
+  <% if (std.publish_date) { %>
+    <tr><th>发布日期</th><td><%= std.publish_date %></td></tr>
+  <% } %>
+  <% if (std.implement_date) { %>
+    <tr><th>实施日期</th><td><%= std.implement_date %></td></tr>
+  <% } %>
+  <% if (std.propose_unit) { %>
+    <tr><th>提出单位</th><td><%= std.propose_unit %></td></tr>
+  <% } %>
+  <% if (std.tech_committee) { %>
+    <tr><th>归口单位</th><td><%= std.tech_committee %></td></tr>
+  <% } %>
+  <% if (std.drafting_unit) { %>
+    <tr><th>起草单位</th><td><%= std.drafting_unit %></td></tr>
+  <% } %>
+  <% if (std.drafters) { %>
+    <tr><th>起草人</th><td><%= std.drafters %></td></tr>
+  <% } %>
+  <% if (std.publisher) { %>
+    <tr><th>出版社</th><td><%= std.publisher %></td></tr>
+  <% } %>
+</table>
+
+<% if (related.length) { %>
+  <div class="section" style="margin-top: var(--gap); margin-bottom: 0;">
+    <div class="section-head"><h2>相关标准</h2></div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>标准编号</th><th>标准名称</th><th class="num">状态</th></tr></thead>
+        <tbody>
+          <% related.forEach((r) => { %>
+            <tr>
+              <td class="std-num"><a href="/standard/<%= r.id %>"><%= r.std_number %></a></td>
+              <td class="title"><a href="/standard/<%= r.id %>"><%= r.title %></a></td>
+              <td class="num"><span class="status status-<%= r.status %>"><%= r.status %></span></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

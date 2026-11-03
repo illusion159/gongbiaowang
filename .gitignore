@@ -1,0 +1,19 @@
+# 依赖
+node_modules/
+
+# 数据库（含 WAL / 备份，体积大且是抓取数据，不提交）
+data/gongbiao.db*
+
+# 日志
+*.log
+
+# 设计工具工作目录
+.taste-skill/
+
+# 探索用抓取的临时 HTML
+_h.html
+_home.html
+_page.html
+
+# 抓取导出的标准清单（衍生数据）
+pdf_standards.txt

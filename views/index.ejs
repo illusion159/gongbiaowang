@@ -1,0 +1,150 @@
+<%- include('partials/header') %>
+
+<div class="page-head">
+  <h1>标准查询</h1>
+  <p class="sub">收录 <%= counts.total.toLocaleString('zh-CN') %> 条国家标准与行业标准，按编号、名称、分类检索浏览。</p>
+</div>
+
+<div class="section">
+  <div class="stats">
+    <div class="stat"><b><%= counts.total.toLocaleString('zh-CN') %></b><span>标准总数</span></div>
+    <div class="stat"><b><%= counts.current.toLocaleString('zh-CN') %></b><span>现行</span></div>
+    <div class="stat"><b><%= counts.upcoming.toLocaleString('zh-CN') %></b><span>即将实施</span></div>
+    <div class="stat"><b><%= counts.abolished.toLocaleString('zh-CN') %></b><span>废止</span></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <h2>中标分类</h2>
+    <a href="/category" class="more">全部分类 ›</a>
+  </div>
+  <div class="letter-grid">
+    <% ccsStats.forEach((c) => { %>
+      <a href="/category/ccs/<%= c.code %>" class="letter-item" title="<%= c.name %>">
+        <b><%= c.code %></b>
+        <span class="c num"><%= c.count %></span>
+      </a>
+    <% }) %>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <h2>行业标准</h2>
+    <a href="/category" class="more">全部分类 ›</a>
+  </div>
+  <div class="industry-grid">
+    <% industryStats.forEach((c) => { %>
+      <a href="/category/industry/<%= c.code %>" class="industry-item">
+        <span class="code"><%= c.code %></span>
+        <span class="name"><%= c.name %></span>
+        <span class="cnt"><%= c.count.toLocaleString('zh-CN') %></span>
+      </a>
+    <% }) %>
+  </div>
+</div>
+
+<div class="section cols-2">
+  <div>
+    <div class="section-head">
+      <h2>最新标准</h2>
+      <a href="/new" class="more">更多 ›</a>
+    </div>
+    <div class="latest-scroll">
+      <div class="latest-scroll-inner">
+        <% for (var r = 0; r < 2; r++) { %>
+          <% latestStandards.forEach((s) => { %>
+            <a href="/standard/<%= s.id %>" class="latest-item">
+              <span class="latest-num"><%= s.std_number %></span>
+              <span class="latest-name"><%= s.title %></span>
+              <span class="status status-<%= s.status %>"><%= s.status %></span>
+            </a>
+          <% }) %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-head">
+      <h2>标准公告</h2>
+      <a href="/announcement" class="more">更多 ›</a>
+    </div>
+    <div class="table-wrap">
+      <ul class="news-list">
+        <% latestAnnouncements.forEach((a) => { %>
+          <li><a href="/announcement/<%= a.id %>"><%= a.title %></a><span class="date"><%= a.publish_date %></span></li>
+        <% }) %>
+        <% if (!latestAnnouncements.length) { %>
+          <li class="empty">暂无公告数据</li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<% if (upcoming.length) { %>
+<div class="modal-overlay" id="upcoming-modal" role="dialog" aria-modal="true" aria-labelledby="upcoming-title">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="upcoming-title">标准即将实施提醒</h2>
+      <p class="modal-sub"><% if (upcomingTotal > upcoming.length) { %>共 <%= upcomingTotal %> 条标准将在 2 个月内实施，以下是最紧急的 <%= upcoming.length %> 条<% } else { %>以下 <%= upcoming.length %> 条标准将在 2 个月内实施<% } %></p>
+    </div>
+    <ul class="modal-list">
+      <% upcoming.forEach((s) => { %>
+        <li>
+          <div class="m-row">
+            <a href="/standard/<%= s.id %>" class="modal-num"><%= s.std_number %></a>
+            <span class="modal-days"><%= s.daysLeft === 0 ? '今天实施' : '还剩 ' + s.daysLeft + ' 天' %></span>
+          </div>
+          <div class="m-row m-row2">
+            <a href="/standard/<%= s.id %>" class="modal-title"><%= s.title %></a>
+            <span class="modal-date"><%= s.implement_date %> 实施</span>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+    <div class="modal-foot">
+      <button type="button" class="btn modal-close" id="upcoming-close">我知道了</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var overlay = document.getElementById('upcoming-modal');
+  if (!overlay) return;
+  document.body.style.overflow = 'hidden';
+  function close() {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  var btn = document.getElementById('upcoming-close');
+  if (btn) btn.addEventListener('click', close);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+})();
+</script>
+<% } %>
+
+<script>
+// 首页统计数字滚动（尊重「减少动态」偏好）
+(function () {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var nums = document.querySelectorAll('.stat b');
+  nums.forEach(function (el) {
+    var target = parseInt(el.textContent.replace(/[^\d]/g, ''), 10);
+    if (isNaN(target)) return;
+    var start = null, dur = 1000;
+    function step(ts) {
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased).toLocaleString('zh-CN');
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+})();
+</script>
+
+<%- include('partials/footer') %>

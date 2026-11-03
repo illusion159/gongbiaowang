@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+
+<div class="breadcrumb"><a href="/">工标网</a> <span class="cur">› 标准动态</span></div>
+
+<div class="page-head">
+  <h1>标准动态</h1>
+  <p class="sub">标准资讯与最新动态。</p>
+</div>
+
+<div class="table-wrap">
+  <ul class="news-list">
+    <% result.rows.forEach((r) => { %>
+      <li><a href="/news/<%= r.id %>"><%= r.title %></a><span class="date"><%= r.publish_date %></span></li>
+    <% }) %>
+    <% if (!result.rows.length) { %>
+      <li class="empty">暂无动态数据</li>
+    <% } %>
+  </ul>
+</div>
+
+<% if (totalPages > 1) { %>
+  <div class="pagination">
+    <% if (result.page > 1) { %><a href="/news?page=<%= result.page - 1 %>">上一页</a><% } %>
+    <span>第 <%= result.page %> / <%= totalPages %> 页</span>
+    <% if (result.page < totalPages) { %><a href="/news?page=<%= result.page + 1 %>">下一页</a><% } %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

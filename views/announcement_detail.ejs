@@ -1,0 +1,45 @@
+<%- include('partials/header') %>
+
+<div class="breadcrumb"><a href="/">工标网</a> <span class="cur">› <a href="/announcement">标准公告</a> › <%= a.title %></span></div>
+
+<div class="detail-head">
+  <h1><%= a.title %></h1>
+  <div class="detail-meta">
+    <% if (a.publish_date) { %><span style="color:var(--muted)"><%= a.publish_date %></span><% } %>
+    <% if (a.source) { %><span class="sep">·</span><span style="color:var(--muted)"><%= a.source %></span><% } %>
+    <% if (a.category) { %><span class="sep">·</span><span style="color:var(--muted)"><%= a.category %></span><% } %>
+  </div>
+</div>
+
+<% if (a.content) { %>
+  <div class="content-body"><%- a.content.replace(/\n/g, '<br>') %></div>
+<% } %>
+
+<% if (standards.length) { %>
+  <div class="section" style="margin-top: var(--gap); margin-bottom: 0;">
+    <div class="section-head"><h2>本公告涉及标准</h2></div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="num">序号</th><th>标准编号</th><th>标准名称</th><th>代替标准号</th><th class="num">发布日期</th><th class="num">实施日期</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% standards.forEach((s, i) => { %>
+            <tr>
+              <td class="num"><%= i + 1 %></td>
+              <td class="std-num"><%= s.标准编号 || s.number || '' %></td>
+              <td class="title"><%= s.标准名称 || s.name || '' %></td>
+              <td><%= s.代替标准号 || s.replace || '' %></td>
+              <td class="date"><%= s.发布日期 || s.publish_date || '' %></td>
+              <td class="date"><%= s.实施日期 || s.implement_date || '' %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>
